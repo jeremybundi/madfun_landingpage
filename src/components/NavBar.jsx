@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
         </button>
         {isMenuOpen && (
-          <div className="absolute right-0 bg-white shadow-lg rounded-lg mt-2 z-10">
+          <div className="absolute right-0 bg-white font-semibold shadow-lg rounded-lg mt-20 z-10">
             <a href="#marketplace" className="block px-4 py-2 text-sm hover:bg-gray-100">Marketplace</a>
             <a href="#create-event" className="block px-4 py-2 text-sm hover:bg-gray-100">Create event</a>
           </div>
@@ -76,7 +76,7 @@ const Navbar = () => {
       <div className="md:hidden flex items-center relative" ref={dropdownRef}>
         <img src={userImage} alt="User" className="h-5 w-5 ml-2 cursor-pointer" onClick={toggleDropdown} />
         {isDropdownOpen && (
-          <div className="absolute right-0 bg-white shadow-lg rounded-lg mt-2 z-10">
+          <div className="absolute right-0 bg-white font-semibold shadow-lg rounded-lg mt-20 z-10">
             <a href="#signup" className="block px-4 py-2 text-sm hover:bg-gray-100">Sign up</a>
             <a href="#login" className="block px-4 py-2 text-sm hover:bg-gray-100">Login</a>
           </div>
@@ -85,9 +85,9 @@ const Navbar = () => {
 
       {/* Center Items for Larger Screens */}
       <div className="hidden md:flex ml-12 md:ml-36 gap-6 items-center">
-        <div className="flex items-center bg-[#101820] text-white px-3 py-2 rounded-lg">
-          <img src={movie} alt="Movie" className="h-5 w-6 mr-2" />
-          <a href="#streams" className="hover:text-gray-300">Streams</a>
+        <div className="flex items-center bg-[#101820] text-white px-1 py-2 h-7 w-26 rounded-lg">
+          <img src={movie} alt="Movie" className="h-5 w-6 mr-1" />
+          <a href="#streams" className="hover:text-gray-300 text-sm mr-1">Streams</a>
         </div>
         <div className="flex items-center">
           <img src={eventsImage} alt="Events" className="h-4 w-5 mr-1" />
@@ -96,7 +96,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <img src={travelImage} alt="Travel" className="h-4 w-5 mr-1" />
           <a href="#travel" className="text-black text-sm hover:text-gray-600">Travel</a>
-          <span className="flex items-center bg-red-600 ml-1 h-5 text-white px-3 py-2 rounded-full">
+          <span className="flex items-center bg-red-600 ml-1 h-4 text-white text-xs px-2 py-2 rounded-full">
             <a href="#new" className="hover:text-gray-300">New</a>
           </span>
         </div>
