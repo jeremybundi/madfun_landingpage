@@ -1,20 +1,13 @@
-import { useState } from 'react'
-
-import Navbar from './components/NavBar'
-
+import Navbar from './components/NavBar'; // Navbar remains here
+import AppRoutes from './routes'; // Import your routes
 
 function App() {
-
-
   return (
     <>
-    <Navbar/>
-      <div>
-        <p className='text-sm text-red-800 font-sans'> Hello am jeremy</p>
-      </div>
-      
+      <Navbar /> {/* Navbar is displayed on all pages */}
+      <AppRoutes /> {/* Render the routes below the Navbar */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
