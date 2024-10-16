@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import searchIcon from '../assets/images/search.png';
-import videoImage from '../assets/images/video.jpg'; // Import the video.jpg image
-import { FaBars, FaTimes } from 'react-icons/fa'; // Import icons for hamburger menu
+import videoImage from '../assets/images/video.jpg'; 
+import { FaBars, FaTimes } from 'react-icons/fa'; 
 
 const Streams = () => {
   const [streams, setStreams] = useState([]);
-  const [selectedStream, setSelectedStream] = useState(null); // State for the selected movie
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for hamburger menu toggle
+  const [selectedStream, setSelectedStream] = useState(null); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Fetch data from API
   useEffect(() => {
@@ -28,7 +28,7 @@ const Streams = () => {
   const handleStreamSelect = (stream) => {
     setSelectedStream(stream);
     if (isMenuOpen) {
-      setIsMenuOpen(false); // Close the menu when a movie is selected
+      setIsMenuOpen(false); 
     }
   };
 
@@ -47,10 +47,10 @@ const Streams = () => {
         </button>
       </div>
 
-      {/* First Column: Takes 1/3 of the width */}
-      <div className={`w-full md:w-1/3 bg-white p-6 h-full ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
+      {/* First Column: Takes full width on small screens and 1/3 of the width on larger screens */}
+      <div className={`w-full md:w-1/3 bg-white p-6 h-full ${isMenuOpen ? 'block w-full' : 'hidden'} md:block`}>
         {/* Scrollable for larger screens */}
-        <div className={`flex flex-col h-full overflow-y-auto`}>
+        <div className={`flex flex-col h-full`}>
           {/* Filter by Section */}
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-bold ml-16 hidden md:block">All Streams</h2>
@@ -73,11 +73,11 @@ const Streams = () => {
           </div>
 
           {/* Stream List */}
-          <div className="flex-1 ml-16">
+          <div className="flex-1 ml-16 overflow-y-auto">
             {streams.map((stream, index) => (
               <div
                 key={stream.id}
-                onClick={() => handleStreamSelect(stream)} // Close menu and display movie details
+                onClick={() => handleStreamSelect(stream)} 
                 className={`flex items-start mb-2 mr-4 p-2 border-b border-[#cad8e4] cursor-pointer ${index === 0 ? 'border-t border-[#cad8e4]' : ''}`}
               >
                 <img
@@ -100,7 +100,7 @@ const Streams = () => {
       </div>
 
       {/* Second Column: Takes 2/3 of the width */}
-      <div className="w-full md:w-2/3 bg-[#F3F5F8] p-6 h-full flex flex-col items-center overflow-y-auto md:overflow-hidden">
+      <div className="w-full md:w-2/3 bg-[#F3F5F8] p-6 h-full flex flex-col items-center md:overflow-hidden">
         {/* Display the imported video image */}
         <img
           src={videoImage}
@@ -110,7 +110,7 @@ const Streams = () => {
           className="object-cover mt-0"
         />
 
-        {/* Display the selected movie details below the video image */}
+        {/* Movie details below the video image */}
         {selectedStream && (
             <div className="w-full md:w-[860px] mt-2">
                 <div className="flex flex-col md:flex-row items-center md:items-start mt-4 p-4">
