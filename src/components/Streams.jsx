@@ -6,8 +6,12 @@ import { FaTimes } from 'react-icons/fa';
 
 const Streams = () => {
   const [streams, setStreams] = useState([]);
+  const [filteredStreams, setFilteredStreams] = useState([]);
   const [selectedStream, setSelectedStream] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   // Fetch data from API
   useEffect(() => {
@@ -15,15 +19,7 @@ const Streams = () => {
       try {
         const response = await axios.get('/api/movies');
         setStreams(response.data);
-        if (response.data.length > 0) {
-          // Set the first stream as selected by default
-          setSelectedStream(response.data[0]);
-          // Only set the details open if on larger screens
-          if (window.innerWidth >= 768) {
-            setIsDetailsOpen(true); // Open details by default on larger screens
-          }
-        }
-        console.log(response.data);
+        setFilteredStreams(response.data); 
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -32,49 +28,105 @@ const Streams = () => {
     fetchData();
   }, []);
 
+  // Effect to filter streams based on selected filter and search term
+  useEffect(() => {
+    let newFilteredStreams = streams;
+
+    // Filter by content type
+    if (filter !== 'all') {
+      newFilteredStreams = newFilteredStreams.filter(stream => stream.content_type === filter);
+    }
+
+    // Filter by search term
+    if (searchTerm) {
+      newFilteredStreams = newFilteredStreams.filter(stream =>
+        stream.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredStreams(newFilteredStreams);
+  }, [filter, streams, searchTerm]);
+
   // Handle stream selection and open details column
   const handleStreamSelect = (stream) => {
     setSelectedStream(stream);
-    setIsDetailsOpen(true); // Open the details column
+    setIsDetailsOpen(true); 
   };
 
   // Handle closing the details column
   const handleCloseDetails = () => {
-    setIsDetailsOpen(false); // Close the details column
+    setIsDetailsOpen(false); 
+    setSelectedStream(null); 
+  };
+
+  // Toggle search input visibility
+  const handleSearchIconClick = () => {
+    setIsSearchVisible(!isSearchVisible);
+    setSearchTerm(''); 
   };
 
   return (
     <div className="flex flex-col md:flex-row w-full font-poppins h-[690px] mt-1 relative">
-      {/* First Column: Takes full width on small screens and 1/3 of the width on larger screens */}
+      {/* First Column */}
       <div className="w-90% md:w-1/3 bg-white p-6 h-full">
-      <div className="flex flex-col h-full"> 
-      {/* Filter by Section */}
+        <div className="flex flex-col h-full">
+          {/* Filter by Section */}
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-bold ml-16">All Streams</h2>
-            <img src={searchIcon} alt="Search" className="w-6 h-6 cursor-pointer hidden md:block" />
+            <img
+              src={searchIcon}
+              alt="Search"
+              className="w-6 h-6 cursor-pointer md:block"
+              onClick={handleSearchIconClick} 
+            />
           </div>
 
+          {/* Search Input */}
+          {isSearchVisible && (
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Search by title..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-gray-300 md:ml-16 ml-2 rounded-lg p-2 w-[250px] md:w-[300px]"
+              />
+              <button onClick={() => setIsSearchVisible(false)} className="ml-2 text-2xl text-gray-700">
+                <FaTimes />
+              </button>
+            </div>
+          )}
+
           <div className="flex flex-col mb-4">
-            <div className="flex justify-start ml-1 md:ml-16  items-center">
+            <div className="flex justify-start ml-1 md:ml-16 items-center">
               <span className="font-bold">Filter by:</span>
-              <button className="text-[#101820] ml-6 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all">
+              <button
+                onClick={() => setFilter('movie')}
+                className={`text-[#101820] ml-6 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all ${filter === 'movie' ? 'border' : ''}`}
+              >
                 Movies
               </button>
-              <button className="text-[#101820] ml-8 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all">
+              <button
+                onClick={() => setFilter('series')}
+                className={`text-[#101820] ml-8 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all ${filter === 'series' ? 'border' : ''}`}
+              >
                 Series
               </button>
-              <button className="text-[#101820] ml-8 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all">
-                Live
+              <button
+                onClick={() => setFilter('all')}
+                className={`text-[#101820] ml-8 hover:border-[#101820] hover:border rounded-full hover:px-1 transition-all ${filter === 'all' ? 'border' : ''}`}
+              >
+                All
               </button>
             </div>
           </div>
 
           {/* Stream List */}
-          <div className="flex-1  ml-1 md:ml-16 overflow-y-auto">
-            {streams.map((stream, index) => (
+          <div className="flex-1 ml-1 md:ml-16 overflow-y-auto">
+            {filteredStreams.map((stream, index) => (
               <div
                 key={stream.id}
-                onClick={() => handleStreamSelect(stream)} 
+                onClick={() => handleStreamSelect(stream)}
                 className={`flex items-start mb-2 mr-4 p-2 border-b border-[#cad8e4] cursor-pointer ${index === 0 ? 'border-t border-[#cad8e4]' : ''}`}
               >
                 <img
@@ -122,7 +174,7 @@ const Streams = () => {
                 alt="Selected Movie"
                 width={80}
                 height={80}
-                className="object-cover rounded-lg mr-4 hidden md:block" // Hide on small screens
+                className="object-cover rounded-lg mr-4 hidden md:block" 
               />
 
               {/* Movie Details and Play Button */}
